@@ -104,7 +104,7 @@ _http://localhost:3000_から動作を確認する。
 _split-rails-example/Gemfile_
 
 ```ruby
-em 'capistrano-rails', group: :development
+gem 'capistrano-rails', group: :development
 gem 'capistrano'
 ```
 
