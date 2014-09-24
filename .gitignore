@@ -15,4 +15,4 @@ bin/*
 .kitchen/
 .kitchen.local.yml
 
-my_store.tgz
+sinatra_sample.tgz
