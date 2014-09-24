@@ -16,3 +16,4 @@ bin/*
 .kitchen.local.yml
 
 sinatra_sample.tgz
+split-sinatra-example.tgz
