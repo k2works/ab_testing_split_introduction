@@ -6,6 +6,5 @@
 #
 # All rights reserved - Do Not Redistribute
 #
-include_recipe 'yum-epel::default'
-include_recipe 'rvm::vagrant'
-include_recipe 'rvm::system'
+include_recipe 'rvm-env::base'
+include_recipe 'rvm-env::config'

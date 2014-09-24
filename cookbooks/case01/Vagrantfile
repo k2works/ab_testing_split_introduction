@@ -29,12 +29,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       chef.binary_path = "/opt/chef/bin"
 
       chef.run_list = %w[
-        recipe[case01::default]
-        recipe[rvm-env::default]
-        recipe[rvm-env::config]
-        recipe[redis-env::default]
-        recipe[case01::app]
-        recipe[case01::app_config]
+        recipe[rvm-env]
+        recipe[redis-env]
+        recipe[case01]
       ]
     end
   end
