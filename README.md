@@ -11,7 +11,7 @@ A/BテストフレームワークSplitの環境構築と設定を学習する
 | redis     　　　|2.8.9         |             |
 
 # 構成
-+ [環境構築](#1)
++ [デプロイ環境構築](#1)
 + [Sinatraアプリケーション](#2)
 + [Rails3アプリケーション](#3)
 
@@ -98,6 +98,49 @@ $ rails s
 ```
 
 _http://localhost:3000_から動作を確認する。
+
+### デプロイ
+
+_split-rails-example/Gemfile_
+
+```ruby
+em 'capistrano-rails', group: :development
+gem 'capistrano'
+```
+
+```bash
+$ bundle exec capify .
+```
+デプロイ用ファイル編集
+
+_split-rails-example/config/deploy.rb_  
+_split-rails-example/Capfile_
+
+```bash
+$ git init
+$ git add .
+$ git commit -am "Setup"
+$ cap deploy:setup
+```
+
+ファイル所有権の変更
+
+```bash
+$ ssh vagrant@192.168.33.10
+vagrant@192.168.33.10's password:vagrant
+$ cd /var/www/
+$ sudo chgrp vagrant releases/
+$ sudo chgrp vagrant shared/
+$ exit
+```
+
+Railsアプリケーションのデプロイ
+
+```bash
+$ cap deploy
+```
+
+_http://192.168.33.10_から動作を確認する。
 
 # 参照
 + [Split](https://github.com/andrew/split)

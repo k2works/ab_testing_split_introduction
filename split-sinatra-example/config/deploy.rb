@@ -46,7 +46,9 @@ task :deploy => :archive do
     unless test "[ -d #{work_dir}/tmp ]"
       execute "cd #{work_dir}; mkdir -p tmp"
     end
-    execute "cd #{work_dir}; touch tmp/restart.txt"
+    current_dir = "#{deploy_to}/current"
+    execute "ln -s -nf #{work_dir} #{current_dir}"
+    execute "cd #{current_dir}; touch tmp/restart.txt"
   end
 end
 
