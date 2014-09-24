@@ -1,3 +1,6 @@
 source "https://api.berkshelf.com"
 
 metadata
+cookbook "rvm-env", path: "../../site-cookbooks/rvm-env"
+cookbook "redis-env", path: "../../site-cookbooks/redis-env"
+cookbook 'apache2'
