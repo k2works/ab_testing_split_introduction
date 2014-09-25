@@ -14,5 +14,5 @@ require "find"
 end
 
 # Load app
-require "sinatra_sample"
-run SinatraSample
+require "split_sinatra_landingpage"
+run SplitSinatraLandingpage

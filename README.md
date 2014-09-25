@@ -14,6 +14,7 @@ A/BテストフレームワークSplitの環境構築と設定を学習する
 + [デプロイ環境構築](#1)
 + [Sinatraアプリケーション](#2)
 + [Rails3アプリケーション](#3)
++ [Sinatraランディングページサンプル](#4)
 
 # 詳細
 ## <a name="1">デプロイ環境構築</a>
@@ -141,6 +142,93 @@ $ cap deploy
 ```
 
 _http://192.168.33.10_から動作を確認する。
+
+## <a name="4">Sinatraランディングページ</a>
+
+### セットアップ
+
+```bash
+$ hazel split-sinatra-landingpage -d sqlite --bundle
+      create  split-sinatra-landingpage/config/initializers
+      create  split-sinatra-landingpage/lib
+      create  split-sinatra-landingpage/spec
+      create  split-sinatra-landingpage/db/migrate
+      create  split-sinatra-landingpage/lib/.gitkeep
+      create  split-sinatra-landingpage/public/stylesheets
+      create  split-sinatra-landingpage/public/stylesheets/main.css
+      create  split-sinatra-landingpage/public/javascripts
+      create  split-sinatra-landingpage/public/javascripts/.gitkeep
+      create  split-sinatra-landingpage/public/images
+      create  split-sinatra-landingpage/public/images/.gitkeep
+      create  split-sinatra-landingpage/public/images/hazel_icon.png
+      create  split-sinatra-landingpage/public/images/hazel_small.png
+      create  split-sinatra-landingpage/public/favicon.ico
+      create  split-sinatra-landingpage/views
+      create  split-sinatra-landingpage/views/layout.erb
+      create  split-sinatra-landingpage/views/welcome.erb
+      create  split-sinatra-landingpage/split_sinatra_landingpage.rb
+      create  split-sinatra-landingpage/spec/split_sinatra_landingpage_spec.rb
+      create  split-sinatra-landingpage/spec/spec_helper.rb
+      create  split-sinatra-landingpage/config.ru
+      create  split-sinatra-landingpage/Gemfile
+      create  split-sinatra-landingpage/Rakefile
+      create  split-sinatra-landingpage/README.md
+      create  split-sinatra-landingpage/config/db.yml
+      create  split-sinatra-landingpage/config/initializers/database.rb
+         run  bundle from "./split-sinatra-landingpage"
+Fetching gem metadata from https://rubygems.org/.........
+Resolving dependencies...
+Using rake 10.3.2
+Using minitest 5.4.1
+Using rack 1.5.2
+Using rack-protection 1.5.3
+Using rack-test 0.6.2
+Using sequel 4.14.0
+Using tilt 1.4.1
+Using sinatra 1.4.5
+Using sqlite3 1.3.9
+Using bundler 1.6.2
+Your bundle is complete!
+Use `bundle show [gemname]` to see where a bundled gem is installed.
+$ cd split-sinatra-landingpage
+$ $ bundle exec rackup config.ru
+[2014-09-25 09:25:07] INFO  WEBrick 1.3.1
+[2014-09-25 09:25:07] INFO  ruby 2.1.1 (2014-02-24) [x86_64-darwin12.0]
+[2014-09-25 09:25:07] INFO  WEBrick::HTTPServer#start: pid=1982 port=9292
+```
+
+_http://localhost:9292/_で動作を確認する。
+
+### ステージング環境デプロイ
+
+_split-sinatra-landingpage/Gemfile_  
+```ruby
+gem "capistrano"
+gem "capistrano-ext"
+```
+
+```bash
+$ bundle
+$ cap install
+mkdir -p config/deploy
+create config/deploy.rb
+create config/deploy/staging.rb
+create config/deploy/production.rb
+mkdir -p lib/capistrano/tasks
+Capified
+```
+
+デプロイ用ファイル編集
+
+_split-sinatra-landingpage/config/deploy/staging.rb_  
+_split-sinatra-landingpage/config/deploy.rb_  
+_split-sinatra-landingpage/Capfile_  
+
+デプロイ実行
+
+```bash
+$ cap staging deply
+```
 
 # 参照
 + [Split](https://github.com/andrew/split)

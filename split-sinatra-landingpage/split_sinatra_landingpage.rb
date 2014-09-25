@@ -1,4 +1,4 @@
-class SinatraSample < Sinatra::Base
+class SplitSinatraLandingpage < Sinatra::Base
 
   set :public_folder => "public", :static => true
 

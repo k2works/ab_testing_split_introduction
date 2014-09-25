@@ -1,11 +1,11 @@
 require_relative "spec_helper"
-require_relative "../sinatra_sample.rb"
+require_relative "../split_sinatra_landingpage.rb"
 
 def app
-  SinatraSample
+  SplitSinatraLandingpage
 end
 
-describe SinatraSample do
+describe SplitSinatraLandingpage do
   it "responds with a welcome message" do
     get '/'
 
