@@ -211,6 +211,37 @@ _split-sinatra-landingpage/views/index.erb_
 _split-sinatra-landingpage/views/layout.erb_  
 
 
+### A/BテストフレームワークSplit適用
+
+_split-sinatra-landingpage/Gemfile_
+
+```ruby
+gem "split",  github: "andrew/split"
+```
+
+_split-sinatra-landingpage/config.ru_
+
+```ruby
+require 'split/dashboard'
+
+# Split::Dashboard.use Rack::Auth::Basic do |username, password|
+#   username == 'admin' && password == 'password'
+# end
+
+run Rack::URLMap.new \
+  "/"       => SplitSinatraLandingpage.new,
+  "/split" => Split::Dashboard.new
+```
+
+_split-sinatra-landingpage/config/initializers/split.rb_
+
+```ruby
+require 'split'
+
+Split.configure do |config|
+end
+```
+
 ### ステージング環境デプロイ
 
 _split-sinatra-landingpage/Gemfile_  

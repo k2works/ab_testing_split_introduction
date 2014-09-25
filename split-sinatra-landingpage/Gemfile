@@ -6,6 +6,7 @@ gem "sinatra", "~> 1.4"
 # Database Stack
 gem "sequel"
 gem "sqlite3"
+gem "split",  github: "andrew/split"
 
 group :development do
   gem "rake", "~> 10.0"

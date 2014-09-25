@@ -16,3 +16,13 @@ end
 # Load app
 require "split_sinatra_landingpage"
 run SplitSinatraLandingpage
+
+require 'split/dashboard'
+
+# Split::Dashboard.use Rack::Auth::Basic do |username, password|
+#   username == 'admin' && password == 'password'
+# end
+
+run Rack::URLMap.new \
+  "/"       => SplitSinatraLandingpage.new,
+  "/split" => Split::Dashboard.new
