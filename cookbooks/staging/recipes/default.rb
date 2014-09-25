@@ -6,6 +6,6 @@
 #
 # All rights reserved - Do Not Redistribute
 #
-include_recipe 'case01::base'
-include_recipe 'case01::app'
-include_recipe 'case01::app_config'
+include_recipe 'staging::base'
+include_recipe 'staging::app'
+include_recipe 'staging::app_config'

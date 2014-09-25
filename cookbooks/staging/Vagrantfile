@@ -31,7 +31,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       chef.run_list = %w[
         recipe[rvm-env]
         recipe[redis-env]
-        recipe[case01]
+        recipe[staging]
       ]
     end
   end
