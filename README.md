@@ -199,6 +199,18 @@ $ $ bundle exec rackup config.ru
 
 _http://localhost:9292/_で動作を確認する。
 
+### ランディングページ作成
+[Start Bootstrap](http://startbootstrap.com/template-overviews/landing-page/)からテンプレートをダウンロードして適用する。
+
+_split-sinatra-landingpage/public/font-awesome-4.1.0_  
+_split-sinatra-landingpage/public/fonts_  
+_split-sinatra-landingpage/public/images_  
+_split-sinatra-landingpage/public/javascripts_  
+_split-sinatra-landingpage/public/stylesheets_  
+_split-sinatra-landingpage/views/index.erb_  
+_split-sinatra-landingpage/views/layout.erb_  
+
+
 ### ステージング環境デプロイ
 
 _split-sinatra-landingpage/Gemfile_  
@@ -237,3 +249,4 @@ $ cap staging deply
 + [fnichol/chef-rvm](https://github.com/fnichol/chef-rvm)
 + [brianbianco/redisio](https://github.com/brianbianco/redisio)
 + [Hazel](http://c7.github.io/hazel/)
++ [Start Bootstrap](http://startbootstrap.com/template-overviews/landing-page/)

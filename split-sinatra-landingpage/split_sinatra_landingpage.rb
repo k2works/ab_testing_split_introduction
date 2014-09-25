@@ -3,6 +3,6 @@ class SplitSinatraLandingpage < Sinatra::Base
   set :public_folder => "public", :static => true
 
   get "/" do
-    erb :welcome
+    erb :index
   end
 end
