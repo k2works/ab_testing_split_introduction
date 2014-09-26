@@ -9,6 +9,7 @@ A/BテストフレームワークSplitの環境構築と設定を学習する
 | OS X           |10.8.5        |             |
 | ruby      　　　|2.1.1         |             |
 | redis     　　　|2.8.9         |             |
+| Chef    　　　|0.1.0         |             |
 
 # 構成
 + [デプロイ環境構築](#1)
@@ -283,6 +284,109 @@ $ cd cookbooks/production
 $ berks init
 $ rm -rf .git
 ```
+
+Azure用マシン設定&起動
+
+_cookbooks/production/Vagrantfile_
+
+```bash
+$ vagrant up
+```
+
+以下の画面が表示された場合は`Defaults    requiretty`をコメントアウトする。
+
+```bash
+The following SSH command responded with a non-zero exit status.
+Vagrant assumes that this means the command failed!
+
+mkdir -p '/vagrant'
+
+Stdout from the command:
+
+
+
+Stderr from the command:
+
+sudo: sorry, you must have a tty to run sudo
+```
+
+```bash
+$ vagrant ssh
+$ sudo visudo
+
+#Defaults    requiretty
+$ exit
+$ vagrant reload
+```
+
+SSHの設定
+
+```bash
+$ vagrant ssh-config --host split-sample >> ~/.ssh/config
+```
+
+knif-soloでchef-soloをリモート実行する
+
+```bash
+$ chef gem install knife-solo
+```
+
+Chefプロビジョニングの実行
+
+_cookbooks/production/nodes/split-sample.json_
+
+```bash
+$ knife solo bootstrap split-sample --bootstrap-version 11.12.0
+```
+
+プロビジョニング再実行
+
+```bash
+$ knif solo cook split-sample
+```
+
+プロビジョニング再実行時にインストールしたRVMによりchef-soloが見つけられなくなる場合がある。その時のは以下の操作を実行する。
+
+```bash
+$ ssh split-sample
+$ rvm use sysmtem --default
+$ exit
+$ knif solo cook split-sample
+```
+
+もしく
+
+```bash
+$ ssh split-sample rvm use system --default | knife solo cook split-sample
+```
+
+後片付け
+
+```bash
+$ knif solo clean split-sample
+```
+
+エンドポイントの追加
+
+![001](https://farm3.staticflickr.com/2949/15354673551_7a3512137b.jpg)
+
+![002](https://farm3.staticflickr.com/2944/15357547562_40d71e57aa.jpg)
+
+![003](https://farm3.staticflickr.com/2945/15354673591_1611e2a8d6.jpg)
+
+![004](https://farm4.staticflickr.com/3848/15171163450_9f65bd3d5b.jpg)
+
+アプリケーションのデプロイ
+
+```bash
+$ cd ../..
+$ cd split-sinatra-landingpage
+$ cap production deploy
+```
+
+_http://split-sample.cloudapp.net/_で確認する。
+
+![005](https://farm4.staticflickr.com/3879/15357599682_5ab091ef1b.jpg)
 
 # 参照
 + [Split](https://github.com/andrew/split)

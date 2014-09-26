@@ -12,8 +12,7 @@ yum_package "yum-fastestmirror" do
 end
 
 execute "yum-update" do
-    user "root"
-    command "yum -y update"
+    command "sudo yum -y update"
     action :run
 end
 

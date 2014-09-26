@@ -6,6 +6,15 @@ include_recipe 'apache2::default'
   end
 end
 
+rvm_default_ruby "system" do
+  action :create
+end
+
+rvm_shell "update gem --system" do
+  ruby_string "#{node['rvm']['app_version']}@#{node['rvm']['app_gemset']}"
+  code        "gem update --system"
+end
+
 rvm_gemset "#{node['rvm']['app_version']}@#{node['rvm']['app_gemset']}" do
   action :update
 end
