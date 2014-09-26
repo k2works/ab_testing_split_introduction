@@ -1,6 +1,6 @@
 # config valid only for Capistrano 3.1
 lock '3.2.1'
-set :application, 'case01'
+set :application, 'split-sample'
 set :dist_dir_name, 'split-sinatra-landingpage'
 set :dist_base_dir, '../'
 set :deploy_to, '/var/www'
@@ -41,7 +41,7 @@ task :deploy => :archive do
     execute "cd #{deploy_to}; tar -zxvf #{fetch :dist_dir_name}.tgz; rm -fr #{fetch :dist_dir_name}.tgz"
     execute "cd #{deploy_to}; mv #{fetch :dist_dir_name} #{fetch :application}"
     work_dir = "#{deploy_to}/#{fetch :application}"
-    execute "cd #{work_dir}; bundle"
+    execute "cd #{work_dir}; rvm use 2.1.1@split-sample; bundle install"
 
     unless test "[ -d #{work_dir}/tmp ]"
       execute "cd #{work_dir}; mkdir -p tmp"

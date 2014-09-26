@@ -21,7 +21,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.berkshelf.enabled = true
 
   config.vm.define :host1 do | host1 |
-    host1.vm.hostname = "case01"
+    host1.vm.hostname = "staging"
     host1.vm.network :private_network, ip: "192.168.33.10"
     host1.vm.provision :chef_solo do |chef|
       chef_gem_path    = "/opt/chef/embedded/lib/ruby/gems/1.9.1"

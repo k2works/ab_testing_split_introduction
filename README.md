@@ -273,6 +273,17 @@ _split-sinatra-landingpage/Capfile_
 $ cap staging deply
 ```
 
+### プロダクション環境デプロイ
+
+セットアップ
+
+```bash
+$ knife cookbook create production -o cookbooks
+$ cd cookbooks/production
+$ berks init
+$ rm -rf .git
+```
+
 # 参照
 + [Split](https://github.com/andrew/split)
 + [Example of using split in a sinatra app](https://github.com/andrew/split-sinatra-example)
@@ -281,3 +292,7 @@ $ cap staging deply
 + [brianbianco/redisio](https://github.com/brianbianco/redisio)
 + [Hazel](http://c7.github.io/hazel/)
 + [Start Bootstrap](http://startbootstrap.com/template-overviews/landing-page/)
++ [Vagrant と Azure で使い捨て開発環境をさくっと作る](http://qiita.com/zakkied/items/667418c6b9b1ea349687)
++ [Vagrant-AWSでうまくいかない時の調べ方](http://kazuki-u.hatenablog.com/entry/2013/04/02/195134)
++ [knife solo bootstrap , prepare コマンドが通らない時のtips](http://webuilder240.com/knife_solo_404/)
++ [VagrantでRVMを使うときによくはまること](http://blogs.zealot.co.jp/archives/566)

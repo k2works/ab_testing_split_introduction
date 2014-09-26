@@ -1,0 +1,58 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+# Vagrantfile API/syntax version. Don't touch unless you know what you're doing!
+VAGRANTFILE_API_VERSION = "2"
+
+Vagrant.require_version ">= 1.5.0"
+
+ENV['VAGRANT_DEFAULT_PROVIDER'] = 'azure'
+
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+#  config.vm.box = "chef/centos-6.5"
+#  config.vm.box = "ubuntu/trusty64"
+
+#  config.omnibus.chef_version = "11.16.2"
+#  config.omnibus.chef_version = :latest
+
+#  config.berkshelf.enabled = true
+=begin
+  config.vm.define :host1 do | host1 |
+    host1.vm.hostname = "production"
+    host1.vm.network :private_network, ip: "192.168.33.10"
+
+    host1.vm.provision :chef_solo do |chef|
+      chef_gem_path    = "/opt/chef/embedded/lib/ruby/gems/1.9.1"
+      chef.binary_env  = "GEM_PATH=#{chef_gem_path} GEM_HOME=#{chef_gem_path}"
+      chef.binary_path = "/opt/chef/bin"
+
+      chef.run_list = %w[
+        recipe[rvm-env]
+        recipe[redis-env]
+        recipe[production]
+      ]
+    end
+=end
+  config.vm.box = 'azure'
+
+  config.vm.provider :azure do |provider, override|
+    provider.subscription_id      = '3ae1359a-16a5-42c5-b2a3-2495159da1bf'
+    provider.mgmt_certificate     = '/Users/k2works/azure/azure.pem'
+    provider.mgmt_endpoint        = 'https://management.core.windows.net/'
+
+    # vm settings
+    provider.vm_image             = '0b11de9248dd4d87b18621318e037d37__RightImage-CentOS-6.5-x64-v14.1'
+    #provider.vm_image             = 'b39f27a8b8c64d52b05eac6a62ebad85__Ubuntu_DAILY_BUILD-utopic-14_10-amd64-server-20140924-en-us-30GB'
+    provider.vm_location          = 'Japan West'
+    provider.vm_size              = 'Small'
+    provider.vm_name              = 'split-sample'
+    provider.cloud_service_name   = 'split-sample'
+    provider.ssh_private_key_file = '/Users/k2works/.ssh/azure.key'
+    provider.ssh_certificate_file = '/Users/k2works/.ssh/azure-cert.pem'
+
+    override.ssh.private_key_path = '/Users/k2works/.ssh/azure.key'
+    override.vm.box               = 'azure'
+    override.vm.box_url           = 'https://github.com/msopentech/vagrant-azure/raw/master/dummy.box'
+  end
+
+end
