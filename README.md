@@ -9,11 +9,13 @@ A/BテストフレームワークSplitの環境構築と設定を学習する
 | OS X           |10.8.5        |             |
 | ruby      　　　|2.1.1         |             |
 | redis     　　　|2.8.9         |             |
+| Chef    　　　|0.1.0         |             |
 
 # 構成
 + [デプロイ環境構築](#1)
 + [Sinatraアプリケーション](#2)
 + [Rails3アプリケーション](#3)
++ [Sinatraランディングページサンプル](#4)
 
 # 詳細
 ## <a name="1">デプロイ環境構築</a>
@@ -104,7 +106,7 @@ _http://localhost:3000_から動作を確認する。
 _split-rails-example/Gemfile_
 
 ```ruby
-em 'capistrano-rails', group: :development
+gem 'capistrano-rails', group: :development
 gem 'capistrano'
 ```
 
@@ -142,6 +144,250 @@ $ cap deploy
 
 _http://192.168.33.10_から動作を確認する。
 
+## <a name="4">Sinatraランディングページ</a>
+
+### セットアップ
+
+```bash
+$ hazel split-sinatra-landingpage -d sqlite --bundle
+      create  split-sinatra-landingpage/config/initializers
+      create  split-sinatra-landingpage/lib
+      create  split-sinatra-landingpage/spec
+      create  split-sinatra-landingpage/db/migrate
+      create  split-sinatra-landingpage/lib/.gitkeep
+      create  split-sinatra-landingpage/public/stylesheets
+      create  split-sinatra-landingpage/public/stylesheets/main.css
+      create  split-sinatra-landingpage/public/javascripts
+      create  split-sinatra-landingpage/public/javascripts/.gitkeep
+      create  split-sinatra-landingpage/public/images
+      create  split-sinatra-landingpage/public/images/.gitkeep
+      create  split-sinatra-landingpage/public/images/hazel_icon.png
+      create  split-sinatra-landingpage/public/images/hazel_small.png
+      create  split-sinatra-landingpage/public/favicon.ico
+      create  split-sinatra-landingpage/views
+      create  split-sinatra-landingpage/views/layout.erb
+      create  split-sinatra-landingpage/views/welcome.erb
+      create  split-sinatra-landingpage/split_sinatra_landingpage.rb
+      create  split-sinatra-landingpage/spec/split_sinatra_landingpage_spec.rb
+      create  split-sinatra-landingpage/spec/spec_helper.rb
+      create  split-sinatra-landingpage/config.ru
+      create  split-sinatra-landingpage/Gemfile
+      create  split-sinatra-landingpage/Rakefile
+      create  split-sinatra-landingpage/README.md
+      create  split-sinatra-landingpage/config/db.yml
+      create  split-sinatra-landingpage/config/initializers/database.rb
+         run  bundle from "./split-sinatra-landingpage"
+Fetching gem metadata from https://rubygems.org/.........
+Resolving dependencies...
+Using rake 10.3.2
+Using minitest 5.4.1
+Using rack 1.5.2
+Using rack-protection 1.5.3
+Using rack-test 0.6.2
+Using sequel 4.14.0
+Using tilt 1.4.1
+Using sinatra 1.4.5
+Using sqlite3 1.3.9
+Using bundler 1.6.2
+Your bundle is complete!
+Use `bundle show [gemname]` to see where a bundled gem is installed.
+$ cd split-sinatra-landingpage
+$ $ bundle exec rackup config.ru
+[2014-09-25 09:25:07] INFO  WEBrick 1.3.1
+[2014-09-25 09:25:07] INFO  ruby 2.1.1 (2014-02-24) [x86_64-darwin12.0]
+[2014-09-25 09:25:07] INFO  WEBrick::HTTPServer#start: pid=1982 port=9292
+```
+
+_http://localhost:9292/_で動作を確認する。
+
+### ランディングページ作成
+[Start Bootstrap](http://startbootstrap.com/template-overviews/landing-page/)からテンプレートをダウンロードして適用する。
+
+_split-sinatra-landingpage/public/font-awesome-4.1.0_  
+_split-sinatra-landingpage/public/fonts_  
+_split-sinatra-landingpage/public/images_  
+_split-sinatra-landingpage/public/javascripts_  
+_split-sinatra-landingpage/public/stylesheets_  
+_split-sinatra-landingpage/views/index.erb_  
+_split-sinatra-landingpage/views/layout.erb_  
+
+
+### A/BテストフレームワークSplit適用
+
+_split-sinatra-landingpage/Gemfile_
+
+```ruby
+gem "split",  github: "andrew/split"
+```
+
+_split-sinatra-landingpage/config.ru_
+
+```ruby
+require 'split/dashboard'
+
+# Split::Dashboard.use Rack::Auth::Basic do |username, password|
+#   username == 'admin' && password == 'password'
+# end
+
+run Rack::URLMap.new \
+  "/"       => SplitSinatraLandingpage.new,
+  "/split" => Split::Dashboard.new
+```
+
+_split-sinatra-landingpage/config/initializers/split.rb_
+
+```ruby
+require 'split'
+
+Split.configure do |config|
+end
+```
+
+### ステージング環境デプロイ
+
+_split-sinatra-landingpage/Gemfile_  
+```ruby
+gem "capistrano"
+gem "capistrano-ext"
+```
+
+```bash
+$ bundle
+$ cap install
+mkdir -p config/deploy
+create config/deploy.rb
+create config/deploy/staging.rb
+create config/deploy/production.rb
+mkdir -p lib/capistrano/tasks
+Capified
+```
+
+デプロイ用ファイル編集
+
+_split-sinatra-landingpage/config/deploy/staging.rb_  
+_split-sinatra-landingpage/config/deploy.rb_  
+_split-sinatra-landingpage/Capfile_  
+
+デプロイ実行
+
+```bash
+$ cap staging deply
+```
+
+### プロダクション環境デプロイ
+
+セットアップ
+
+```bash
+$ knife cookbook create production -o cookbooks
+$ cd cookbooks/production
+$ berks init
+$ rm -rf .git
+```
+
+Azure用マシン設定&起動
+
+_cookbooks/production/Vagrantfile_
+
+```bash
+$ vagrant up
+```
+
+以下の画面が表示された場合は`Defaults    requiretty`をコメントアウトする。
+
+```bash
+The following SSH command responded with a non-zero exit status.
+Vagrant assumes that this means the command failed!
+
+mkdir -p '/vagrant'
+
+Stdout from the command:
+
+
+
+Stderr from the command:
+
+sudo: sorry, you must have a tty to run sudo
+```
+
+```bash
+$ vagrant ssh
+$ sudo visudo
+
+#Defaults    requiretty
+$ exit
+$ vagrant reload
+```
+
+SSHの設定
+
+```bash
+$ vagrant ssh-config --host split-sample >> ~/.ssh/config
+```
+
+knif-soloでchef-soloをリモート実行する
+
+```bash
+$ chef gem install knife-solo
+```
+
+Chefプロビジョニングの実行
+
+_cookbooks/production/nodes/split-sample.json_
+
+```bash
+$ knife solo bootstrap split-sample --bootstrap-version 11.12.0
+```
+
+プロビジョニング再実行
+
+```bash
+$ knif solo cook split-sample
+```
+
+プロビジョニング再実行時にインストールしたRVMによりchef-soloが見つけられなくなる場合がある。その時のは以下の操作を実行する。
+
+```bash
+$ ssh split-sample
+$ rvm use sysmtem --default
+$ exit
+$ knif solo cook split-sample
+```
+
+もしく
+
+```bash
+$ ssh split-sample rvm use system --default | knife solo cook split-sample
+```
+
+後片付け
+
+```bash
+$ knif solo clean split-sample
+```
+
+エンドポイントの追加
+
+![001](https://farm3.staticflickr.com/2949/15354673551_7a3512137b.jpg)
+
+![002](https://farm3.staticflickr.com/2944/15357547562_40d71e57aa.jpg)
+
+![003](https://farm3.staticflickr.com/2945/15354673591_1611e2a8d6.jpg)
+
+![004](https://farm4.staticflickr.com/3848/15171163450_9f65bd3d5b.jpg)
+
+アプリケーションのデプロイ
+
+```bash
+$ cd ../..
+$ cd split-sinatra-landingpage
+$ cap production deploy
+```
+
+_http://split-sample.cloudapp.net/_で確認する。
+
+![005](https://farm4.staticflickr.com/3879/15357599682_5ab091ef1b.jpg)
+
 # 参照
 + [Split](https://github.com/andrew/split)
 + [Example of using split in a sinatra app](https://github.com/andrew/split-sinatra-example)
@@ -149,3 +395,8 @@ _http://192.168.33.10_から動作を確認する。
 + [fnichol/chef-rvm](https://github.com/fnichol/chef-rvm)
 + [brianbianco/redisio](https://github.com/brianbianco/redisio)
 + [Hazel](http://c7.github.io/hazel/)
++ [Start Bootstrap](http://startbootstrap.com/template-overviews/landing-page/)
++ [Vagrant と Azure で使い捨て開発環境をさくっと作る](http://qiita.com/zakkied/items/667418c6b9b1ea349687)
++ [Vagrant-AWSでうまくいかない時の調べ方](http://kazuki-u.hatenablog.com/entry/2013/04/02/195134)
++ [knife solo bootstrap , prepare コマンドが通らない時のtips](http://webuilder240.com/knife_solo_404/)
++ [VagrantでRVMを使うときによくはまること](http://blogs.zealot.co.jp/archives/566)

@@ -23,9 +23,9 @@ rvm_gemset "#{node['rvm']['app_gemset']}" do
   action :create
 end
 
-rvm_default_ruby "#{node['rvm']['app_version']}@#{node['rvm']['app_gemset']}" do
-  action :create
-end
+#rvm_default_ruby "#{node['rvm']['app_version']}@#{node['rvm']['app_gemset']}" do
+#  action :create
+#end
 
 bash "rvmグループにユーザーを追加" do
  code <<-EOH
